@@ -10,6 +10,8 @@ from sklearn.metrics import roc_auc_score
 from tqdm import tqdm
 
 
+logging.basicConfig(level=logging.DEBUG)
+
 def eval_epoch(model,
                batch_gen,
                device,

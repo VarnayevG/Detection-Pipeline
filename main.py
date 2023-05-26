@@ -22,6 +22,8 @@ LR, FACTOR = 1e-05, 0.3
 SCH_TYPE = 'plateao'
 Y_LIM = (0, 1.5)
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 def main():
     parser = argparse.ArgumentParser()

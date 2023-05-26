@@ -10,13 +10,14 @@ class ClassificationDataset(Dataset):
 
     def __init__(self, path_to_data: Path, path_to_labels: Path, stage: str, input_size=224, transform=None):
         self.transform = transform
-        if stage == 'train' or stage == 'valid':
+        if stage == 'train' or stage == 'val':
             self.labels = pd.read_csv(path_to_labels)
             self.file_names = [path_to_data / file_nm for file_nm in self.labels['id']]
         else:
             self.labels = None
+            #TODO: parse as regex
             self.file_names = [
-                path_to_data / file_nm for file_nm in sorted(path_to_data.glob('*'), key=lambda x: int(x[2:-4]))
+                path_to_data / file_nm for file_nm in sorted(path_to_data.glob('*'), key=lambda x: int(x.stem[2:]))
             ]
 
         if stage == 'train':
