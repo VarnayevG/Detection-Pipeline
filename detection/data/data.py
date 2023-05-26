@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import pandas as pd
 from PIL import Image
@@ -8,26 +8,16 @@ import torchvision.transforms as transforms
 
 class ClassificationDataset(Dataset):
 
-    def __init__(self, path_to_data, path_to_labels, stage, input_size=224, transform=None):
-        self.path_to_data = path_to_data
+    def __init__(self, path_to_data: Path, path_to_labels: Path, stage: str, input_size=224, transform=None):
         self.transform = transform
         if stage == 'train' or stage == 'valid':
             self.labels = pd.read_csv(path_to_labels)
+            self.file_names = [path_to_data / file_nm for file_nm in self.labels['id']]
         else:
             self.labels = None
-
-        # в таком же порядке сохраним пути до файлов
-        if self.labels is not None:
-            self.file_names = [path_to_data + file_nm for file_nm in self.labels['id']]
-        else:
             self.file_names = [
-                path_to_data + file_nm for file_nm in sorted(
-                    os.listdir(self.path_to_data), key=lambda x: int(x[2:-4])
-                )
+                path_to_data / file_nm for file_nm in sorted(path_to_data.glob('*'), key=lambda x: int(x[2:-4]))
             ]
-
-        # необходимые трасформации
-        self.input_size = input_size
 
         if stage == 'train':
             self._preprocess = transforms.Compose([
@@ -58,7 +48,7 @@ class ClassificationDataset(Dataset):
             augmented = self.transform(image=image)
             image = augmented['image']
 
-        if self.labels is not None:
+        if self.labels:
             return image, self.labels.iloc[idx]['target_people']
         else:
             return image
