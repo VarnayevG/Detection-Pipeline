@@ -81,7 +81,6 @@ def train(model,
             logging.info(f'Epoch {epoch + 1} of {num_epochs}:\n')
             logging.info(f'\train loss: {train_loss}\nval loss: {val_loss}')
             logging.info(f'\train auc: {train_auc}\nval loss: {val_auc}')
-    plot_learning_curves(history, ylim)
 
     return model, history
 
@@ -95,10 +94,10 @@ def get_predicts(model, batch_gen, device):
         y_pred = logits.detach().cpu().numpy().reshape(-1)
         preds += y_pred.tolist()
 
-    return preds
+    return np.array(preds)
 
 
-def plot_learning_curves(path: Path, history: List, ylim=(2, 4)):
+def plot_learning_curves(path: Path, history: List, y_lim=(2, 4)):
     '''
     Функция для обучения модели и вывода лосса и метрики во время обучения.
 
@@ -115,14 +114,14 @@ def plot_learning_curves(path: Path, history: List, ylim=(2, 4)):
     plt.ylabel('Loss ', fontsize=15)
     plt.xlabel('Epoch', fontsize=15)
     plt.legend()
-    plt.ylim(ylim)
+    plt.ylim(y_lim)
 
     plt.subplot(1, 2, 2)
     plt.title('ROC AUC score vs. epoch', fontsize=15)
     plt.plot(history['auc']['train'], label='train')
     plt.plot(history['auc']['val'], label='val')
     plt.ylabel('ROC AUC score', fontsize=15)
-    plt.xlabel('eEoch', fontsize=15)
+    plt.xlabel('Epoch', fontsize=15)
     plt.savefig(path)
     plt.legend()
     plt.show()
