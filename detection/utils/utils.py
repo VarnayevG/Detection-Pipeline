@@ -52,9 +52,9 @@ def train(model,
           criterion,
           optimizer,
           scheduler,
-          sch_type,
           train_batch_gen,
           val_batch_gen,
+          sch_type,
           num_epochs=50,
           ylim=(2, 4)):
     '''
