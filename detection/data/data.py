@@ -36,12 +36,13 @@ class ClassificationDataset(Dataset):
     def __len__(self):
         return len(self.file_names)
 
-    def _load_file(self, path):
+#TODO: add annotations for function outputs
+    def _load_file(self, path: Path):
         with open(path, 'rb') as input_file:
             with Image.open(input_file) as img:
                 return img.convert('RGB')
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int):
         image = self._load_file(self.file_names[idx])
         image = self._preprocess(image)
         if self.transform:
