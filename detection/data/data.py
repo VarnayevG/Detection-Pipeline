@@ -50,7 +50,7 @@ class ClassificationDataset(Dataset):
             augmented = self.transform(image=image)
             image = augmented['image']
 
-        if self.labels:
+        if self.labels is not None:
             return image, self.labels.iloc[idx]['target_people']
         else:
             return image

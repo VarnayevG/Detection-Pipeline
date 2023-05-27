@@ -46,7 +46,7 @@ def main():
     test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, shuffle=False)
     logging.info('Created train/val/test DataLoaders')
 
-    device = torch.device("cuda")
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
     net = ResNet50()
     net = net.to(device)
@@ -57,7 +57,7 @@ def main():
     logging.info('Initialize NN and params')
 
     net, history = train(
-        net, criterion, optimizer, scheduler,  train_loader, val_loader, sch_type=SCH_TYPE, num_epochs=NUM_EPOCHS, ylim=Y_LIM, )
+        net, device, criterion, optimizer, scheduler,  train_loader, val_loader, sch_type=SCH_TYPE, num_epochs=NUM_EPOCHS, ylim=Y_LIM)
     plot_learning_curves(history, y_lim=Y_LIM)
     logging.info('Trained NN')
 
