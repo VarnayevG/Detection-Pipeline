@@ -10,7 +10,7 @@ from sklearn.metrics import roc_auc_score
 from tqdm import tqdm
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 def eval_epoch(model,
                batch_gen,
@@ -81,8 +81,8 @@ def train(model,
             scheduler.step()
         if epoch == 1 or epoch + 1 % 5 == 0:
             logging.info(f'Epoch {epoch + 1} of {num_epochs}:\n')
-            logging.info(f'\train loss: {train_loss}\nval loss: {val_loss}')
-            logging.info(f'\train auc: {train_auc}\nval loss: {val_auc}')
+            logging.info(f'\ntrain loss: {train_loss}\nval loss: {val_loss}')
+            logging.info(f'\ntrain auc: {train_auc}\nval loss: {val_auc}')
 
     return model, history
 
@@ -124,6 +124,5 @@ def plot_learning_curves(path: Path, history: List, y_lim=(2, 4)):
     plt.plot(history['auc']['val'], label='val')
     plt.ylabel('ROC AUC score', fontsize=15)
     plt.xlabel('Epoch', fontsize=15)
-    plt.savefig(path)
     plt.legend()
-    plt.show()
+    plt.savefig(path)

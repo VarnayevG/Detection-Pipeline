@@ -58,17 +58,19 @@ def main():
 
     net, history = train(
         net, device, criterion, optimizer, scheduler,  train_loader, val_loader, sch_type=SCH_TYPE, num_epochs=NUM_EPOCHS, ylim=Y_LIM)
-    plot_learning_curves(history, y_lim=Y_LIM)
+    plot_learning_curves(Path(args.output_path) / 'curves.png', history, y_lim=Y_LIM)
     logging.info('Trained NN')
 
-    preds = get_predicts(net, test_loader)
-    probs = 1 / (1 + np.exp(-np.array(preds)))
+    preds = get_predicts(net, test_loader, device)
+    probs = 1 / (1 + np.exp(-preds))
     logging.info('Calculated probabilities')
 
     output = pd.DataFrame(columns=['id', 'target_people'])
     output['id'] = np.arange(1, probs.shape[0] + 1, 1)
+    output['id'] = output['id'].astype(str)
+    output['id'] = output['id'].apply(lambda x: 'te' + x.zfill(4) + '.jpg')  #TODO: prettify this
     output['target_people'] = probs
-    output.to_csv(Path(args.output_path), index=False)
+    output.to_csv(Path(args.output_path) / 'result.csv', index=False)
     logging.info('Output is created, terminating')
 
 if __name__ == '__main__':

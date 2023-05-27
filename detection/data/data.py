@@ -17,7 +17,7 @@ class ClassificationDataset(Dataset):
             self.labels = None
             #TODO: parse as regex
             self.file_names = [
-                path_to_data / file_nm for file_nm in sorted(path_to_data.glob('*'), key=lambda x: int(x.stem[2:]))
+                file_nm for file_nm in sorted(path_to_data.glob('*'), key=lambda x: int(x.stem[2:]))
             ]
 
         if stage == 'train':
